@@ -19,27 +19,30 @@ class AdbExecutor:
         self.apk_path = os.path.join(self.aab_dir, "universal.apk")
         self.bundletool_path = os.path.join(self.aab_dir, "bundletool-all-1.11.0.jar")
 
+    def aab_install(self, path):
+        self.convert_aab(path)
+        logging.info('Unzip aab apks')
+        cmd.exec_cmd(f'7z x -aoa -o{self.aab_dir} {self.aab_path}', timeout=30)
+        self.adb_install(self.apk_path)
+
     def adb_install(self, path):
-        logging.info(f'Installing build {self.adb_dir}')
-        cmd.exec_cmd(f'{self.adb_exe} install {path}')
+        logging.info(f'Installing build {path}')
+        cmd.exec_cmd(f'cd /D {self.adb_dir}')
+        cmd.exec_cmd(f'adb install {path}', timeout=30)
 
     def convert_aab(self, path):
         logging.info(f'Stating to convert aab to apk build {path}')
         cmd1 = f"java -jar {self.bundletool_path} build-apks --bundle={path} --output={self.aab_path} --mode=universal" \
                f" --overwrite"
-        cmd.exec_cmd(cmd1)
-
-    def install_aab(self, path):
-        self.convert_aab(path)
-        logging.info('Unzip aab apks')
-        cmd.exec_cmd(f'7z x -aoa -o{self.aab_dir} {self.aab_path}')
-        self.adb_install(self.apk_path)
+        cmd.exec_cmd(cmd1, timeout=30)
 
     def go_to_adb(self):
         logging.info(f'Starting adb in  {self.adb_exe}')
         cmd.exec_cmd(f'{self.adb_exe}')
 
 adb = AdbExecutor()
-adb.install_aab('D:\Builds\AAB\stable.aab')
+
+adb.aab_install(r'D:\Builds\AAB\stable.aab')
+
 
 

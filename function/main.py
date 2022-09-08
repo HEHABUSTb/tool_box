@@ -15,7 +15,7 @@ configure_logging()
 
 cmd_str = f'cd {adb_dir}'
 cmd_str_2 = f'adb.exe'
-cmd_str_3 = f'adb devices'
+cmd_str_3 = f'adb install D:\Builds\Release_0.1.2.apk'
 cmd.exec_cmd(cmd_str)
 #cmd.exec_cmd(cmd_str_2)
 print(cmd.exec_cmd(cmd_str_3))
