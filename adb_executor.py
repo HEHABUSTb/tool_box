@@ -1,9 +1,7 @@
-import time
-from function.GetLogger import configure_logging
+from GetLogger import configure_logging
 import cmd
 import os
 import logging
-import sys
 
 configure_logging()
 
@@ -23,26 +21,48 @@ class AdbExecutor:
         self.convert_aab(path)
         logging.info('Unzip aab apks')
         cmd.exec_cmd(f'7z x -aoa -o{self.aab_dir} {self.aab_path}', timeout=30)
-        self.adb_install(self.apk_path)
+        result = self.adb_install(self.apk_path)
+
+        return result
 
     def adb_install(self, path):
         logging.info(f'Installing build {path}')
         cmd.exec_cmd(f'cd /D {self.adb_dir}')
-        cmd.exec_cmd(f'adb install {path}', timeout=30)
+        result = cmd.exec_cmd(f'adb install {path}', timeout=5)
+
+        return result
 
     def convert_aab(self, path):
         logging.info(f'Stating to convert aab to apk build {path}')
         cmd1 = f"java -jar {self.bundletool_path} build-apks --bundle={path} --output={self.aab_path} --mode=universal" \
                f" --overwrite"
-        cmd.exec_cmd(cmd1, timeout=30)
+        result = cmd.exec_cmd(cmd1, timeout=30)
+
+        return result
+
+    def check_device(self):
+        logging.info(f'Checking device')
+        cmd.exec_cmd(f'cd /D {self.adb_dir}')
+        result = cmd.exec_cmd(f'adb devices', timeout=5)
+
+        return result
 
     def go_to_adb(self):
         logging.info(f'Starting adb in  {self.adb_exe}')
         cmd.exec_cmd(f'{self.adb_exe}')
 
-adb = AdbExecutor()
+    def unity_logging(self):
+        logging.info(f'Unity logs collecting')
+        cmd.exec_cmd(f'cd /D {self.adb_dir}')
+        result = cmd.logcat()
+        print(result)
 
-adb.aab_install(r'D:\Builds\AAB\stable.aab')
+        return result
+
+
+#adb = AdbExecutor()
+#adb.check_device()
+
 
 
 

@@ -4,7 +4,7 @@ import logging
 
 def configure_logging():
     format = "%(asctime)s :%(levelname)s : %(name)s :%(message)s"
-    logging.basicConfig(filemode='w', filename='logfile.log', encoding='utf-8', level=logging.DEBUG, format=format,
+    logging.basicConfig(filemode='w', filename='ToolBox.log', encoding='utf-8', level=logging.DEBUG, format=format,
                         datefmt='%d/%m/%y %H:%M:%S')
 
 

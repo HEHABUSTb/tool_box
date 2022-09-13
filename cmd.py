@@ -1,5 +1,7 @@
 import logging
+import os
 import subprocess
+import time
 
 
 class ProcResult:
@@ -33,3 +35,22 @@ def exec_cmd(cmd, timeout=None):
     logging.debug(f'stderr:\n{result.stderr}')
 
     return result
+
+
+def logcat(timeout=None):
+    try:
+        root_dir = os.path.dirname(os.path.abspath(__file__))
+        logcat_filename = 'unity.log'
+        logcat_file = open(os.path.join(root_dir, logcat_filename), 'w')
+        cmd = 'adb logcat -s Unity'
+        process = subprocess.Popen(cmd, shell=True, stdout=logcat_file, stderr=subprocess.PIPE, text=True)
+        result = ProcResult(cmd, 0, logcat_file, '')
+        time.sleep(5)
+        process.kill()
+
+        return result
+
+    except Exception as e:
+        print(f'Something go wrong {e}')
+        logging.debug(f'Something go wrong {e}')
+        raise e
