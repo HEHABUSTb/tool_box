@@ -37,31 +37,6 @@ def exec_cmd(cmd, timeout=None):
 
     return result
 
-
-def logcat2(timeout=None):
-    try:
-        root_dir = os.path.dirname(os.path.abspath(__file__))
-        logcat_filename = 'unity.log'
-        logcat_file = open(os.path.join(root_dir, logcat_filename), 'w')
-        cmd = 'adb logcat -s Unity'
-        process = subprocess.Popen(cmd, shell=True, stdout=logcat_file, stderr=subprocess.PIPE, text=True)
-        stdout, stderr = process.communicate()
-        time.sleep(5)
-        process.kill()
-    except Exception as e:
-        print(f'Something go wrong {e}')
-        logging.debug(f'Something go wrong {e}')
-        raise e
-
-    return_code = process.returncode
-    result = ProcResult(cmd, return_code, stdout, stderr)
-
-    logging.debug(f'stdout:\n{result.stdout}')
-    logging.debug(f'stderr:\n{result.stderr}')
-
-    return result
-
-
 def logcat(timeout=None):
     try:
         root_dir = os.path.dirname(os.path.abspath(__file__))

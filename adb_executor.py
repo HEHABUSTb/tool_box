@@ -65,10 +65,5 @@ class AdbExecutor:
 
         return result
 
-
 #adb = AdbExecutor()
 #adb.check_device()
-
-
-
-
