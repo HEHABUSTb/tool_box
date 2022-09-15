@@ -18,7 +18,7 @@ class AdbExecutor:
         self.bundletool_path = os.path.join(self.aab_dir, "bundletool-all-1.11.0.jar")
 
     def aab_install(self, path):
-        self.convert_aab(path)
+        self.aab_convert(path)
         logging.info('Unzip aab apks')
         cmd.exec_cmd(f'7z x -aoa -o{self.aab_dir} {self.aab_path}', timeout=30)
         result = self.adb_install(self.apk_path)
@@ -32,7 +32,7 @@ class AdbExecutor:
 
         return result
 
-    def convert_aab(self, path):
+    def aab_convert(self, path):
         logging.info(f'Stating to convert aab to apk build {path}')
         cmd1 = f"java -jar {self.bundletool_path} build-apks --bundle={path} --output={self.aab_path} --mode=universal" \
                f" --overwrite"
@@ -55,7 +55,13 @@ class AdbExecutor:
         logging.info(f'Unity logs collecting')
         cmd.exec_cmd(f'cd /D {self.adb_dir}')
         result = cmd.logcat()
-        print(result)
+
+        return result
+
+    def unity_logging2(self):
+        logging.info(f'Unity logs collecting')
+        cmd.exec_cmd(f'cd /D {self.adb_dir}')
+        result = cmd.exec_cmd(f'adb logcat -s Unity')
 
         return result
 

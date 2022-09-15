@@ -1,7 +1,7 @@
 import os
 import traceback
 import logging
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QMovie
 from PyQt6.QtWidgets import QMainWindow, QApplication, QFileDialog
 import sys
 from toolbox_ui import Ui_ToolBox
@@ -43,7 +43,7 @@ class ToolBoxFunctions(QMainWindow, Ui_ToolBox):
     def open_convert_aab(self):
         file_path = QFileDialog.getOpenFileName(self, 'Open apk file')
         adb = AdbExecutor()
-        result = adb.convert_aab(file_path[0])
+        result = adb.aab_convert(file_path[0])
         self.check_result(result)
 
     def open_check_result(self):
