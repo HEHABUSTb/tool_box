@@ -158,10 +158,8 @@ class ToolBoxFunctions(QMainWindow, Ui_ToolBox):
 
     def clicked_unity_open(self):
         adb = AdbExecutor()
-        worker = Worker(adb.open_unity)
-        worker.signals.started.connect(self.in_progress)
-        worker.signals.result.connect(self.check_result)
-        self.threadpool.start(worker)
+        result = adb.open_unity()
+        self.check_result(result)
 
 
 def error_handler(etype, value, tb):
