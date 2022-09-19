@@ -90,6 +90,7 @@ class ToolBoxFunctions(QMainWindow, Ui_ToolBox):
         self.button_aab_convert.clicked.connect(self.clicked_convert_aab)
         self.button_catlog.clicked.connect(self.clicked_unity_logs)
         self.button_check_device.clicked.connect(self.clicked_check_device)
+        self.button_open_unity_log.clicked.connect(self.clicked_unity_open)
 
         self.threadpool = QThreadPool()
         logging.info("Multithreading with maximum %d threads" % self.threadpool.maxThreadCount())
@@ -151,6 +152,13 @@ class ToolBoxFunctions(QMainWindow, Ui_ToolBox):
     def clicked_unity_logs(self):
         adb = AdbExecutor()
         worker = Worker(adb.unity_logging)
+        worker.signals.started.connect(self.in_progress)
+        worker.signals.result.connect(self.check_result)
+        self.threadpool.start(worker)
+
+    def clicked_unity_open(self):
+        adb = AdbExecutor()
+        worker = Worker(adb.open_unity)
         worker.signals.started.connect(self.in_progress)
         worker.signals.result.connect(self.check_result)
         self.threadpool.start(worker)

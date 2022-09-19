@@ -2,7 +2,7 @@
 
 
 block_cipher = None
-added_files = [('images//loading.gif', 'images'), ('images//toolbox.ico', 'images')]
+added_files = [('images//loading.gif', 'images'), ('images//toolbox.ico', 'images'), ('adb//*', 'adb'), ('aab//bundletool-all-1.11.0.jar', 'aab')]
 
 a = Analysis(
     ['toolbox.py'],

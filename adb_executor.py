@@ -4,18 +4,21 @@ import os
 import logging
 
 configure_logging()
+root_dir = os.path.dirname(os.path.abspath(__file__))
 
 
 class AdbExecutor:
 
     def __init__(self):
-        self.root_dir = os.path.dirname(os.path.abspath(__file__))
+        self.root_dir = os.getcwd()
+
         self.adb_dir = os.path.join(self.root_dir, "adb")
         self.adb_exe = os.path.join(self.adb_dir, 'adb.exe')
         self.aab_dir = os.path.join(self.root_dir, "aab")
         self.aab_path = os.path.join(self.aab_dir, "aab.apks")
         self.apk_path = os.path.join(self.aab_dir, "universal.apk")
         self.bundletool_path = os.path.join(self.aab_dir, "bundletool-all-1.11.0.jar")
+        self.unity_log_path = os.path.join(self.root_dir, 'unity.log')
 
     def aab_install(self, path):
         self.aab_convert(path)
@@ -34,6 +37,7 @@ class AdbExecutor:
 
     def aab_convert(self, path):
         logging.info(f'Stating to convert aab to apk build {path}')
+        logging.info(f'Output {self.aab_path}')
         cmd1 = f"java -jar {self.bundletool_path} build-apks --bundle={path} --output={self.aab_path} --mode=universal" \
                f" --overwrite"
         result = cmd.exec_cmd(cmd1, timeout=30)
@@ -47,6 +51,16 @@ class AdbExecutor:
 
         return result
 
+    def open_unity(self):
+        logging.info(f'Openinging device')
+        cmd.exec_cmd(f'cd /D {self.adb_dir}')
+        result = cmd.exec_cmd(f'notepad++ unity.log', timeout=5)
+
+        return result
+
+    def open_unity2(self):
+        os.open(self.unity_log_path, flags=os.O_NONBLOCK)
+
     def go_to_adb(self):
         logging.info(f'Starting adb in  {self.adb_exe}')
         cmd.exec_cmd(f'{self.adb_exe}')
@@ -58,12 +72,6 @@ class AdbExecutor:
 
         return result
 
-    def unity_logging2(self):
-        logging.info(f'Unity logs collecting')
-        cmd.exec_cmd(f'cd /D {self.adb_dir}')
-        result = cmd.exec_cmd(f'adb logcat -s Unity')
-
-        return result
 
 #adb = AdbExecutor()
 #adb.check_device()

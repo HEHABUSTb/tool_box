@@ -39,7 +39,8 @@ def exec_cmd(cmd, timeout=None):
 
 def logcat(timeout=None):
     try:
-        root_dir = os.path.dirname(os.path.abspath(__file__))
+        root_dir = os.getcwd()
+        logging.info(f'root dir {root_dir}')
         logcat_filename = 'unity.log'
         logcat_file = open(os.path.join(root_dir, logcat_filename), 'w')
         cmd = 'adb logcat -s Unity'
@@ -47,6 +48,8 @@ def logcat(timeout=None):
         result = ProcResult(cmd, 0, logcat_file, '')
         time.sleep(5)
         process.terminate()
+        logcat_file.close()
+        print( f' Closed ? {logcat_file.closed}')
         print('Terminated')
 
         return result
@@ -55,4 +58,3 @@ def logcat(timeout=None):
         print(f'Something go wrong {e}')
         logging.debug(f'Something go wrong {e}')
         raise e
-
