@@ -37,13 +37,12 @@ def exec_cmd(cmd, timeout=None):
 
     return result
 
-def logcat(timeout=None):
+def logcat(cmd, timeout=None):
     try:
         root_dir = os.getcwd()
         logging.info(f'root dir {root_dir}')
         logcat_filename = 'unity.log'
         logcat_file = open(os.path.join(root_dir, logcat_filename), 'w')
-        cmd = 'adb logcat -s Unity'
         process = subprocess.Popen(cmd, shell=True, stdout=logcat_file, stderr=subprocess.PIPE, text=True)
         result = ProcResult(cmd, 0, logcat_file, '')
         time.sleep(5)

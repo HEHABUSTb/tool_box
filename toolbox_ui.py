@@ -71,7 +71,7 @@ class Ui_ToolBox(object):
         _translate = QtCore.QCoreApplication.translate
         ToolBox.setWindowTitle(_translate("ToolBox", "ToolBox"))
         self.button_check_device.setText(_translate("ToolBox", "Check Device"))
-        self.button_adb_install.setText(_translate("ToolBox", "adb install"))
+        self.button_adb_install.setText(_translate("ToolBox", "apk install"))
         self.button_catlog.setText(_translate("ToolBox", "Unity logcat"))
         self.button_open_unity_log.setText(_translate("ToolBox", "Open Unity log"))
         self.button_aab_install.setText(_translate("ToolBox", "aab install"))

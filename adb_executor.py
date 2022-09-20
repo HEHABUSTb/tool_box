@@ -30,8 +30,8 @@ class AdbExecutor:
 
     def adb_install(self, path):
         logging.info(f'Installing build {path}')
-        cmd.exec_cmd(f'cd /D {self.adb_dir}')
-        result = cmd.exec_cmd(f'adb install {path}', timeout=5)
+        logging.info(f'adb_dir {self.adb_exe}')
+        result = cmd.exec_cmd(f'{self.adb_exe} install {path}', timeout=5)
 
         return result
 
@@ -46,20 +46,15 @@ class AdbExecutor:
 
     def check_device(self):
         logging.info(f'Checking device')
-        cmd.exec_cmd(f'cd /D {self.adb_dir}')
-        result = cmd.exec_cmd(f'adb devices', timeout=5)
+        result = cmd.exec_cmd(f'{self.adb_exe} devices', timeout=5)
 
         return result
 
     def open_unity(self):
         logging.info(f'Openinging device')
-        cmd.exec_cmd(f'cd /D {self.adb_dir}')
         result = cmd.exec_cmd(f'notepad++ unity.log', timeout=5)
 
         return result
-
-    def open_unity2(self):
-        os.open(self.unity_log_path, flags=os.O_NONBLOCK)
 
     def go_to_adb(self):
         logging.info(f'Starting adb in  {self.adb_exe}')
@@ -67,8 +62,7 @@ class AdbExecutor:
 
     def unity_logging(self):
         logging.info(f'Unity logs collecting')
-        cmd.exec_cmd(f'cd /D {self.adb_dir}')
-        result = cmd.logcat()
+        result = cmd.logcat(f'{self.adb_exe} logcat -s Unity')
 
         return result
 
