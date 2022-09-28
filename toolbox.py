@@ -84,6 +84,7 @@ class ToolBoxFunctions(QMainWindow, Ui_ToolBox):
         super().__init__()
         self.setupUi(self)
         self.show()
+        self.build_name = ''
 
         self.button_adb_install.clicked.connect(self.clicked_adb_install)
         self.button_aab_install.clicked.connect(self.clicked_aab_install)
@@ -106,14 +107,17 @@ class ToolBoxFunctions(QMainWindow, Ui_ToolBox):
         self.movie.stop()
         self.label_busy_indicator.setHidden(True)
 
-    def check_result(self, result, text=''):
+    def check_result(self, result):
         self.movie_stop()
+        text = self.build_name
         if result.rc == 0:
             self.browser_log.setText(f'Success {text} \n {result.stdout}')
             self.browser_log.setStyleSheet("color:green")
         else:
             self.browser_log.setText(f'Error ! Check logs \n {result.stderr}')
             self.browser_log.setStyleSheet("color:red")
+
+        self.build_name = ''
 
     def in_progress(self):
         self.movie_start()
@@ -123,6 +127,7 @@ class ToolBoxFunctions(QMainWindow, Ui_ToolBox):
     def clicked_adb_install(self):
         file_path = QFileDialog.getOpenFileName(self, 'Open apk file')
         adb = AdbExecutor()
+        self.build_name = file_path[0]
         worker = Worker(adb.adb_install, file_path[0])
         worker.signals.started.connect(self.in_progress)
         worker.signals.result.connect(self.check_result)
